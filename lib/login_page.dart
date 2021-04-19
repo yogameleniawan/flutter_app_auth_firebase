@@ -77,6 +77,15 @@ class _LoginPageState extends State<LoginPage> {
                               padding: const EdgeInsets.only(
                                   top: 5.0, right: 14, left: 14, bottom: 8),
                               child: TextFormField(
+                                validator: (value) {
+                                  // add your custom validation here.
+                                  if (value.isEmpty) {
+                                    return 'Empty Field, Please enter some text';
+                                  }
+                                  if (value.length < 4) {
+                                    return 'Must be more than 3 charater';
+                                  }
+                                },
                                 controller: model.passwordController,
                                 obscureText: !model.passwordVisible,
                                 style: TextStyle(
