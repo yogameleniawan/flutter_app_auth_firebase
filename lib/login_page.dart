@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pemrograman_mobile_week10/sign_in.dart';
-
+import 'package:email_validator/email_validator.dart';
 import 'first_screen.dart';
 import 'model.dart';
 
@@ -29,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 50),
                 Container(
                   child: Form(
+                    autovalidate: true,
                     child: Padding(
                       padding: const EdgeInsets.only(
                           top: 5.0, bottom: 15, left: 10, right: 10),
@@ -49,6 +50,10 @@ class _LoginPageState extends State<LoginPage> {
                               padding: const EdgeInsets.only(
                                   top: 15.0, right: 14, left: 14, bottom: 8),
                               child: TextFormField(
+                                validator: (value) =>
+                                    EmailValidator.validate(value)
+                                        ? null
+                                        : "Please enter a valid email",
                                 controller: model.userIdController,
                                 style: TextStyle(
                                     color: Colors.black,
