@@ -164,10 +164,11 @@ class _LoginPageState extends State<LoginPage> {
                                         passwordController.text);
 
                                 if (result != null) {
+                                  String uid = result.email;
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) {
-                                        return Halaman();
+                                        return FirstScreen(uid: uid);
                                       },
                                     ),
                                   );
@@ -244,10 +245,11 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         signInWithGoogle().then((result) {
           if (result != null) {
+            String uid = "";
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return FirstScreen();
+                  return FirstScreen(uid: uid);
                 },
               ),
             );
