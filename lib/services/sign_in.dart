@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:pemrograman_mobile_week10/models/account.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 String name;
-String email;
+String emailGoogle;
 String imageUrl;
+
 Future<String> signInWithGoogle() async {
   await Firebase.initializeApp();
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -28,7 +28,7 @@ Future<String> signInWithGoogle() async {
     assert(user.displayName != null);
     assert(user.photoURL != null);
     name = user.displayName;
-    email = user.email;
+    emailGoogle = user.email;
     imageUrl = user.photoURL;
 // Only taking the first part of the name, i.e., First Name
     if (name.contains(" ")) {
@@ -44,33 +44,21 @@ Future<String> signInWithGoogle() async {
   return null;
 }
 
-Account _userFromFirebaseUser(User user) {
-  return user != null ? Account(uid: user.uid) : null;
-}
-
 Future<void> signOutGoogle() async {
   await googleSignIn.signOut();
   print("User Signed Out");
 }
 
-Future registerWithEmailAndPassword(String email, String password) async {
-  try {
-    UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    User user = result.user;
-    return _userFromFirebaseUser(user);
-  } catch (e) {
-    print(e.toString());
-    return null;
-  }
-}
-
-Future signInWithEmailAndPassword(String email, String password) async {
+Future<User> signInWithEmailAndPassword(String email, String password) async {
   await Firebase.initializeApp();
   try {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
     User user = result.user;
+    assert(user != null);
+    assert(await user.getIdToken() != null);
+    final User currentUser = await _auth.currentUser;
+    assert(user.uid == currentUser.uid);
     return user;
   } catch (e) {
     print(e.toString());
@@ -84,6 +72,8 @@ Future<User> signUp(String email, String password) async {
     UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
     User user = result.user;
+    assert(user != null);
+    assert(await user.getIdToken() != null);
     return user;
   } catch (e) {
     print(e.toString());

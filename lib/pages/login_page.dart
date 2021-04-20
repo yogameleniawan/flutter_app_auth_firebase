@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:pemrograman_mobile_week10/models/model.dart';
@@ -15,6 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   Model model = new Model();
   bool _showPassword = false;
+  User user;
   final _formKey = GlobalKey<FormState>();
   String error = "";
   TextEditingController passwordController = TextEditingController();
@@ -164,11 +166,11 @@ class _LoginPageState extends State<LoginPage> {
                                         passwordController.text);
 
                                 if (result != null) {
-                                  String uid = result.email;
+                                  String email = result.email;
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) {
-                                        return FirstScreen(uid: uid);
+                                        return FirstScreen(email: email);
                                       },
                                     ),
                                   );
@@ -245,11 +247,10 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         signInWithGoogle().then((result) {
           if (result != null) {
-            String uid = "";
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return FirstScreen(uid: uid);
+                  return FirstScreen();
                 },
               ),
             );

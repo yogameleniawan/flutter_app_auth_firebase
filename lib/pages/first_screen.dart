@@ -1,10 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pemrograman_mobile_week10/pages/login_page.dart';
 import 'package:pemrograman_mobile_week10/services/sign_in.dart';
 
 class FirstScreen extends StatelessWidget {
-  FirstScreen({this.uid});
-  String uid;
+  FirstScreen({this.email});
+  String email;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +38,7 @@ class FirstScreen extends StatelessWidget {
                     color: Colors.black54),
               ),
               Text(
-                uid,
+                "user.uid",
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.deepPurple,
@@ -52,7 +53,7 @@ class FirstScreen extends StatelessWidget {
                     color: Colors.black54),
               ),
               Text(
-                "email",
+                email != null ? email : emailGoogle,
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.deepPurple,
