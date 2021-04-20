@@ -4,8 +4,10 @@ import 'package:pemrograman_mobile_week10/pages/login_page.dart';
 import 'package:pemrograman_mobile_week10/services/sign_in.dart';
 
 class FirstScreen extends StatelessWidget {
-  FirstScreen({this.email});
+  FirstScreen({this.email, this.name, this.image});
   String email;
+  String name;
+  String image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,13 +24,13 @@ class FirstScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              // CircleAvatar(
-              //   backgroundImage: NetworkImage(
-              //     imageUrl,
-              //   ),
-              //   radius: 60,
-              //   backgroundColor: Colors.transparent,
-              // ),
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  image != null ? image : imageUrl,
+                ),
+                radius: 60,
+                backgroundColor: Colors.transparent,
+              ),
               SizedBox(height: 40),
               Text(
                 'NAME',
@@ -38,7 +40,7 @@ class FirstScreen extends StatelessWidget {
                     color: Colors.black54),
               ),
               Text(
-                "user.uid",
+                name != null ? name : nameGoogle,
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.deepPurple,

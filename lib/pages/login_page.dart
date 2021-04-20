@@ -167,10 +167,16 @@ class _LoginPageState extends State<LoginPage> {
 
                                 if (result != null) {
                                   String email = result.email;
+                                  String name = "User";
+                                  String image =
+                                      "https://www.pngkit.com/png/full/281-2812821_user-account-management-logo-user-icon-png.png";
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) {
-                                        return FirstScreen(email: email);
+                                        return FirstScreen(
+                                            email: email,
+                                            name: name,
+                                            image: image);
                                       },
                                     ),
                                   );
