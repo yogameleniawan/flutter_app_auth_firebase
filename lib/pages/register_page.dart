@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:pemrograman_mobile_week10/sign_in.dart';
 import 'package:email_validator/email_validator.dart';
-import 'first_screen.dart';
-import 'model.dart';
+import 'package:pemrograman_mobile_week10/models/model.dart';
+import 'package:pemrograman_mobile_week10/services/authservice.dart';
+import 'package:pemrograman_mobile_week10/services/sign_in.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   Model model = new Model();
   bool _showPassword = false;
-
+  final _formKey = GlobalKey<FormState>();
+  String error = "";
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text("Sign Up Email"),
+      ),
       body: Container(
         color: Colors.white,
         child: Center(
@@ -29,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 50),
                 Container(
                   child: Form(
+                    key: _formKey,
                     autovalidate: true,
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -41,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                             Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: Text(
-                                "Login",
+                                "Register",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w800, fontSize: 25),
                               ),
@@ -54,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                                     EmailValidator.validate(value)
                                         ? null
                                         : "Please enter a valid email",
-                                controller: model.userIdController,
+                                controller: emailController,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -86,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                                     return 'Must be more than 3 charater';
                                   }
                                 },
-                                controller: model.passwordController,
+                                controller: passwordController,
                                 obscureText: !model.passwordVisible,
                                 style: TextStyle(
                                     color: Colors.black,
@@ -112,7 +119,9 @@ class _LoginPageState extends State<LoginPage> {
                                       model.passwordVisible
                                           ? Icons.visibility
                                           : Icons.visibility_off,
-                                      color: Color(0xFFE6E6E6),
+                                      color: model.passwordVisible
+                                          ? Colors.blue
+                                          : Color(0xFFE6E6E6),
                                     ),
                                   ),
                                 ),
@@ -140,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                         color: Colors.white,
                                       ),
                                       Text(
-                                        'Sign in with Email',
+                                        'Sign Up with Email',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold,
@@ -148,62 +157,25 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ],
                                   ))),
+                              onTap: () async {
+                                await AuthServices.signUp(emailController.text,
+                                    passwordController.text);
+                                Navigator.pop(context);
+                              },
                             ),
                             SizedBox(
                               height: 16,
                             ),
+                            Text(error),
                           ],
                         ),
                       ),
                     ),
                   ),
                 ),
-                _signInButton(),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _signInButton() {
-    return OutlineButton(
-      splashColor: Colors.grey,
-      onPressed: () {
-        signInWithGoogle().then((result) {
-          if (result != null) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return FirstScreen();
-                },
-              ),
-            );
-          }
-        });
-      },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.grey),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(image: AssetImage("assets/google-logo.png"), height: 35.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                'Sign in with Google',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                ),
-              ),
-            )
-          ],
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pemrograman_mobile_week10/login_page.dart';
-import 'package:pemrograman_mobile_week10/sign_in.dart';
+import 'package:pemrograman_mobile_week10/pages/login_page.dart';
+import 'package:pemrograman_mobile_week10/services/sign_in.dart';
 
 class FirstScreen extends StatelessWidget {
   @override
