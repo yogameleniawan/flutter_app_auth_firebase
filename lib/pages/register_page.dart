@@ -89,8 +89,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   if (value.isEmpty) {
                                     return 'Empty Field, Please enter some text';
                                   }
-                                  if (value.length < 4) {
-                                    return 'Must be more than 3 charater';
+                                  if (value.length < 6) {
+                                    return 'Must be more than 6 charater';
                                   }
                                 },
                                 controller: passwordController,

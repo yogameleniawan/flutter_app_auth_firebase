@@ -64,6 +64,11 @@ Future<User> signInWithEmailAndPassword(String email, String password) async {
     assert(user.uid == currentUser.uid);
     return user;
   } catch (e) {
+    if (e.code == 'user-not-found') {
+      print('No user found for that email.');
+    } else if (e.code == 'wrong-password') {
+      print('Wrong password provided for that user.');
+    }
     print(e.toString());
     return null;
   }

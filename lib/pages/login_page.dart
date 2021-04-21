@@ -55,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                                     fontWeight: FontWeight.w800, fontSize: 25),
                               ),
                             ),
+                            Text(error, style: TextStyle(color: Colors.red)),
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 15.0, right: 14, left: 14, bottom: 8),
@@ -91,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                                   if (value.isEmpty) {
                                     return 'Empty Field, Please enter some text';
                                   }
-                                  if (value.length < 4) {
-                                    return 'Must be more than 3 charater';
+                                  if (value.length < 6) {
+                                    return 'Must be more than 6 charater';
                                   }
                                 },
                                 controller: passwordController,
@@ -164,7 +165,6 @@ class _LoginPageState extends State<LoginPage> {
                                     .signInWithEmailAndPassword(
                                         emailController.text,
                                         passwordController.text);
-
                                 if (result != null) {
                                   String email = result.email;
                                   String name = "User";
@@ -180,13 +180,17 @@ class _LoginPageState extends State<LoginPage> {
                                       },
                                     ),
                                   );
+                                } else {
+                                  setState(() {
+                                    error =
+                                        "Invalid Login, Wrong Email/Password";
+                                  });
                                 }
                               },
                             ),
                             SizedBox(
                               height: 16,
                             ),
-                            Text(error),
                           ],
                         ),
                       ),
