@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:pemrograman_mobile_week10/models/model.dart';
-import 'package:pemrograman_mobile_week10/pages/page.dart';
 import 'package:pemrograman_mobile_week10/pages/register_page.dart';
-import 'package:pemrograman_mobile_week10/services/authservice.dart';
 import 'package:pemrograman_mobile_week10/services/sign_in.dart';
 import 'first_screen.dart';
 
@@ -14,8 +11,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Model model = new Model();
   bool _showPassword = false;
+  bool passwordVisible = false;
   User user;
   final _formKey = GlobalKey<FormState>();
   String error = "";
@@ -97,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 },
                                 controller: passwordController,
-                                obscureText: !model.passwordVisible,
+                                obscureText: passwordVisible,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -114,15 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                                   suffixIcon: GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        model.passwordVisible =
-                                            !model.passwordVisible;
+                                        passwordVisible = !passwordVisible;
                                       });
                                     },
                                     child: Icon(
-                                      model.passwordVisible
+                                      passwordVisible
                                           ? Icons.visibility
                                           : Icons.visibility_off,
-                                      color: model.passwordVisible
+                                      color: passwordVisible
                                           ? Colors.blue
                                           : Color(0xFFE6E6E6),
                                     ),
@@ -135,59 +131,60 @@ class _LoginPageState extends State<LoginPage> {
                               height: 16,
                             ),
                             InkWell(
-                              child: Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  height:
-                                      MediaQuery.of(context).size.height / 18,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.blue),
-                                  child: Center(
-                                      child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.email,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        'Sign in with Email',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                      ),
-                                    ],
-                                  ))),
-                              onTap: () async {
-                                dynamic result = await AuthServices
-                                    .signInWithEmailAndPassword(
-                                        emailController.text,
-                                        passwordController.text);
-                                if (result != null) {
-                                  String email = result.email;
-                                  String name = "User";
-                                  String image =
-                                      "https://www.pngkit.com/png/full/281-2812821_user-account-management-logo-user-icon-png.png";
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return FirstScreen(
-                                            email: email,
-                                            name: name,
-                                            image: image);
-                                      },
-                                    ),
-                                  );
-                                } else {
-                                  setState(() {
-                                    error =
-                                        "Invalid Login, Wrong Email/Password";
+                                child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    height:
+                                        MediaQuery.of(context).size.height / 18,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.blue),
+                                    child: Center(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.email,
+                                          color: Colors.white,
+                                        ),
+                                        Text(
+                                          'Sign in with Email',
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ))),
+                                onTap: () async {
+                                  signInWithEmailAndPassword(
+                                          emailController.text,
+                                          passwordController.text)
+                                      .then((result) {
+                                    if (result != null) {
+                                      String email = result.email;
+                                      String name = "User";
+                                      String image =
+                                          "https://www.pngkit.com/png/full/281-2812821_user-account-management-logo-user-icon-png.png";
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return FirstScreen(
+                                                email: email,
+                                                name: name,
+                                                image: image);
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      setState(() {
+                                        error =
+                                            "Invalid Login, Wrong Email/Password";
+                                      });
+                                    }
                                   });
-                                }
-                              },
-                            ),
+                                }),
                             SizedBox(
                               height: 16,
                             ),

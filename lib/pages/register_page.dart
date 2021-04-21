@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:pemrograman_mobile_week10/models/model.dart';
-import 'package:pemrograman_mobile_week10/services/authservice.dart';
 import 'package:pemrograman_mobile_week10/services/sign_in.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -10,8 +8,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  Model model = new Model();
   bool _showPassword = false;
+  bool passwordVisible = false;
   final _formKey = GlobalKey<FormState>();
   String error = "";
   TextEditingController passwordController = TextEditingController();
@@ -94,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   }
                                 },
                                 controller: passwordController,
-                                obscureText: !model.passwordVisible,
+                                obscureText: !passwordVisible,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -111,15 +109,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                   suffixIcon: GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        model.passwordVisible =
-                                            !model.passwordVisible;
+                                        passwordVisible = !passwordVisible;
                                       });
                                     },
                                     child: Icon(
-                                      model.passwordVisible
+                                      passwordVisible
                                           ? Icons.visibility
                                           : Icons.visibility_off,
-                                      color: model.passwordVisible
+                                      color: passwordVisible
                                           ? Colors.blue
                                           : Color(0xFFE6E6E6),
                                     ),
@@ -132,37 +129,41 @@ class _RegisterPageState extends State<RegisterPage> {
                               height: 16,
                             ),
                             InkWell(
-                              child: Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  height:
-                                      MediaQuery.of(context).size.height / 18,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.blue),
-                                  child: Center(
-                                      child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.email,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        'Sign Up with Email',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                      ),
-                                    ],
-                                  ))),
-                              onTap: () async {
-                                await AuthServices.signUp(emailController.text,
-                                    passwordController.text);
-                                Navigator.pop(context);
-                              },
-                            ),
+                                child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    height:
+                                        MediaQuery.of(context).size.height / 18,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.blue),
+                                    child: Center(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.email,
+                                          color: Colors.white,
+                                        ),
+                                        Text(
+                                          'Sign Up with Email',
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ))),
+                                onTap: () async {
+                                  signUp(emailController.text,
+                                          passwordController.text)
+                                      .then((result) {
+                                    if (result != null) {
+                                      Navigator.pop(context);
+                                    }
+                                  });
+                                }),
                             SizedBox(
                               height: 16,
                             ),
