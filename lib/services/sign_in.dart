@@ -7,6 +7,8 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 String nameGoogle;
 String emailGoogle;
 String imageUrl;
+String errorMessageRegister;
+String errorMessageLogin;
 
 Future<String> signInWithGoogle() async {
   await Firebase.initializeApp();
@@ -65,9 +67,13 @@ Future<User> signInWithEmailAndPassword(String email, String password) async {
     return user;
   } catch (e) {
     if (e.code == 'user-not-found') {
-      print('No user found for that email.');
+      errorMessageLogin = "No user found for that email.";
     } else if (e.code == 'wrong-password') {
-      print('Wrong password provided for that user.');
+      errorMessageLogin = "Wrong password provided for that user.";
+    } else if (e.code == 'unknown') {
+      errorMessageLogin = "Empty input not allowed";
+    } else if (e.code == 'invalid-email') {
+      errorMessageLogin = "Invalid Email";
     }
     print(e.toString());
     return null;
@@ -84,6 +90,17 @@ Future<User> signUp(String email, String password) async {
     assert(await user.getIdToken() != null);
     return user;
   } catch (e) {
+    if (e.code == 'email-already-in-use') {
+      errorMessageRegister = "Email already in use.";
+    } else if (e.code == 'operation-not-allowed') {
+      errorMessageRegister = "Email/Password must be filled.";
+    } else if (e.code == 'unknown') {
+      errorMessageRegister = "Empty input not allowed";
+    } else if (e.code == 'invalid-email') {
+      errorMessageRegister = "Invalid Email";
+    } else if (e.code == 'weak-password') {
+      errorMessageRegister = "Weak Password, must be more than 6 character";
+    }
     print(e.toString());
     return null;
   }

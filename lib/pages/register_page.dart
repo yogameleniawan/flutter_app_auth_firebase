@@ -14,6 +14,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String error = "";
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +31,6 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 FlutterLogo(size: 150),
-                SizedBox(height: 50),
                 Container(
                   child: Form(
                     key: _formKey,
@@ -51,6 +51,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                     fontWeight: FontWeight.w800, fontSize: 25),
                               ),
                             ),
+                            Text(
+                                errorMessageRegister != null
+                                    ? errorMessageRegister
+                                    : "",
+                                style: TextStyle(color: Colors.red)),
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 15.0, right: 14, left: 14, bottom: 8),
@@ -161,6 +166,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                       .then((result) {
                                     if (result != null) {
                                       Navigator.pop(context);
+                                    } else {
+                                      setState(() {
+                                        errorMessageRegister =
+                                            errorMessageRegister;
+                                      });
                                     }
                                   });
                                 }),

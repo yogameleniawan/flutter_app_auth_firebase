@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   String error = "";
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +31,9 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                FlutterLogo(size: 150),
                 SizedBox(height: 50),
+                FlutterLogo(size: 150),
+                SizedBox(height: 25),
                 Container(
                   child: Form(
                     key: _formKey,
@@ -52,7 +54,11 @@ class _LoginPageState extends State<LoginPage> {
                                     fontWeight: FontWeight.w800, fontSize: 25),
                               ),
                             ),
-                            Text(error, style: TextStyle(color: Colors.red)),
+                            Text(
+                                errorMessageLogin != null
+                                    ? errorMessageLogin
+                                    : "",
+                                style: TextStyle(color: Colors.red)),
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 15.0, right: 14, left: 14, bottom: 8),
@@ -89,12 +95,9 @@ class _LoginPageState extends State<LoginPage> {
                                   if (value.isEmpty) {
                                     return 'Empty Field, Please enter some text';
                                   }
-                                  if (value.length < 6) {
-                                    return 'Must be more than 6 charater';
-                                  }
                                 },
                                 controller: passwordController,
-                                obscureText: passwordVisible,
+                                obscureText: !passwordVisible,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -179,8 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                                       );
                                     } else {
                                       setState(() {
-                                        error =
-                                            "Invalid Login, Wrong Email/Password";
+                                        errorMessageLogin = errorMessageLogin;
                                       });
                                     }
                                   });
@@ -194,54 +196,33 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                _signInButton(),
-                _signUpButton(),
+                MaterialButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Don't have an account?"),
+                      Text(
+                        " SIGN UP",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return RegisterPage();
+                        },
+                      ),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _signInButton(),
+                ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _signUpButton() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 10),
-      child: OutlineButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return RegisterPage();
-              },
-            ),
-          );
-        },
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-        highlightElevation: 0,
-        borderSide: BorderSide(color: Colors.grey),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Icons.email,
-                color: Colors.blue,
-                size: 30.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  'Sign up with Email',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
-                  ),
-                ),
-              )
-            ],
           ),
         ),
       ),
